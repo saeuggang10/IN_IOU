@@ -1,10 +1,8 @@
-# Degree
+# IOU
 -------------------------------
 ### 설명
 ```
-* 사각형(bbox>points)이 아니거나, 약속된 것과 다른 형식으로 좌표가 입력되어있는 데이터를 제거
-* 많이 기울어진 데이터 제거
-* 화질이 안 좋은 데이터 제거
+ 이미지 딥러닝 검증방법 중 하나로 실제 좌표와 예측좌표값을 교집합/합집합한 비율이 0.5이상일 때 제대로 검출되었다고 판단하는 알고리즘을 만들었다.
 ```
 
 -------------------------------
@@ -12,65 +10,36 @@
 
 ### package
 ```
-import math
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import matplotlib
 import pandas as pd
 import os
 import json
 import glob
-from csv import DictWriter
-import numpy as np
-```
-
-### def
-```
-삼각함수로 기울기를 구하기 위해 각 변의 길이를 구하는 함수
 ```
 
 ### input
 ```
-dir_path = '주소를 입력해주세요'
+target = '주소를 입력해주세요'
 ```
 
 ### code
-1. jpg_size
-    * 저화질의 사진을 제거하기 위한 기능
-    * 오름차순 정렬
+1. 데이터 전처리
+    * xlsx값에 데이터가 \n, 띄워쓰기, (, )이 있어 제대로 읽지 못함으로 숫자와 ,만 남도록 정리해준다
 
-2. nomal_data
-    * 약속된 포맷과 다른 방식의 좌표값을 찾아내는 기능
-    * 사각형 모양이 아닌 것 제거
+2. 좌표값
+    * 좌표 값의 숫자 8개를 짝수, 홀수 리스트를 활용해 x, y값으로 나눠서 동적변수를 만든다
+    * gpd.GeoSeries로 Polygon을 그린다
     
-3. seta_data
-    * 사각형의 기울기를 구하는 기능
+3. IOU
+    * union : 합집합
+    * intersection : 교집합
+    * symdiff : 여집합
+        * 3가지를 이용해 IOU값과 1-IOU값을 구해 df에 새 변수로 넣는다
     
-4. rank
-    * 정상여부판단>기울기>화질 순으로 정렬해 순위가 높을수록 noisy data
-
--------------------------------
--------------------------------
-
-# Plot
--------------------------------
-### 설명
-```
-degree가 잘 작동되었는지 확인하기위해 시각화
-```
--------------------------------
--------------------------------
-
-### package
-```
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
-from shapely.geometry.polygon import LinearRing, Polygon
-```
-
-### code
-1. annotations
-    * 약속된 포맷으로 들어갔는지 확인하기 위해 순서대로 좌표이름을 붙임
-
-2. axhline / axvline
-    * 기울어진 정도를 인지하기 편하도록 수직, 수평선을 그림
+4. df['difference']
+    * 실제 IOU값과 알고리즘으로 만든 IOU_predict의 값을 비교해 알고리즘의 정밀도를 확인한다
 
 -------------------------------
 -------------------------------
@@ -80,4 +49,7 @@ from shapely.geometry.polygon import LinearRing, Polygon
     * 코드 테스팅을 위한 파일
     
 #### 주의사항
-* plot의 shapely패키지가 잘 실행되지 않을 수 있음으로 cmd에서 개별적인 설치가 필요함
+* plot의 geopandas패키지가 잘 실행되지 않을 수 있음으로 cmd에서 개별적인 설치가 필요함.
+
+#### p.s.
+* shaply, geopandas, matplotlib을 활용해 모두 계산해 보았으나 shaply와 geopandas가 거의 비슷했고, geopands가 좀 더 정확성이 높았다.
