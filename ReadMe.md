@@ -33,16 +33,16 @@ target = '주소를 입력해주세요'
     * gpd.GeoSeries로 Polygon을 그린다
     
 3. IOU
-    * union : 합집합
+* union : 합집합
             
 ![image_01](https://user-images.githubusercontent.com/78424269/212542170-4254a7a0-f3bc-415f-9b32-471d97a1af10.png)
 
-     * intersection : 교집합
+* intersection : 교집합
     
 ![image_02](https://user-images.githubusercontent.com/78424269/212542168-ef245710-81a5-4225-999f-df3dca7fc72f.png)
     
-     * symdiff : 여집합
-         * 3가지를 이용해 IOU값과 1-IOU값을 구해 df에 새 변수로 넣는다
+* symdiff : 여집합
+    * 3가지를 이용해 IOU값과 1-IOU값을 구해 df에 새 변수로 넣는다
     
 4. df['difference']
     * 실제 IOU값과 알고리즘으로 만든 IOU_predict의 값을 비교해 알고리즘의 정밀도를 확인한다
