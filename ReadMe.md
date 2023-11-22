@@ -1,30 +1,9 @@
 # IOU
--------------------------------
-### 설명
 ```
- 이미지 딥러닝 검증방법 중 하나로 실제 좌표와 예측좌표값을 교집합/합집합의 비율이 0.5이상일 때 제대로 검출되었다고 판단하는 알고리즘을 만들었다.
+ 이미지 딥러닝 검증방법 중 하나로 실제 좌표와 예측좌표값을 교집합/합집합의 비율이 0.5이상일 때 제대로 검출되었다고 판단하는 알고리즘
 ```
 
--------------------------------
--------------------------------
-
-### package
-```
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import matplotlib
-import pandas as pd
-import os
-import json
-import glob
-```
-
-### input
-```
-target = '주소를 입력해주세요'
-```
-
-### code
+## code
 1. 데이터 전처리
     * xlsx값에 데이터가 \n, 띄워쓰기, (, )이 있어 제대로 읽지 못함으로 숫자와 ,만 남도록 정리해준다
 
@@ -33,32 +12,29 @@ target = '주소를 입력해주세요'
     * gpd.GeoSeries로 Polygon을 그린다
     
 3. IOU
-* union : 합집합
-            
-![image_01](https://user-images.githubusercontent.com/78424269/212542170-4254a7a0-f3bc-415f-9b32-471d97a1af10.png)
+    * union : 합집합
+                
+        ![image_01](https://user-images.githubusercontent.com/78424269/212542170-4254a7a0-f3bc-415f-9b32-471d97a1af10.png)
 
-* intersection : 교집합
-    
-![image_02](https://user-images.githubusercontent.com/78424269/212542168-ef245710-81a5-4225-999f-df3dca7fc72f.png)
-    
-* symdiff : 여집합
-    * 3가지를 이용해 IOU값과 1-IOU값을 구해 df에 새 변수로 넣는다
-    
+    * intersection : 교집합
+        
+        ![image_02](https://user-images.githubusercontent.com/78424269/212542168-ef245710-81a5-4225-999f-df3dca7fc72f.png)
+            
+    * symdiff : 여집합
+
+<br>
+👉 3가지를 이용해 IOU값과 1-IOU값을 구해 df에 새 변수로 넣는다
+
+<br>
+ 
 4. df['difference']
     * 실제 IOU값과 알고리즘으로 만든 IOU_predict의 값을 비교해 알고리즘의 정밀도를 확인한다
 
--------------------------------
--------------------------------
+<br>
+<br>
 
-#### 첨부파일
-1. IOU 확인용2.xlsx
-    * 코드 테스팅을 위한 파일
+## **🔥 성장경험**
 
-2. IOU_test.xlsx
-    * 코딩 결과 파일
-    
-#### 주의사항
-* plot의 geopandas패키지가 잘 실행되지 않을 수 있음으로 cmd에서 개별적인 설치가 필요함.
-
-#### p.s.
-* shaply, geopandas, matplotlib을 활용해 모두 계산해 보았으나 shaply와 geopandas가 거의 비슷했고, geopands가 좀 더 정확성이 높았다.
+- geopandas, shaply 두 패키지를 사용해 어떤 패키지가 실제 수기계산과 유사한 값을 띄는지 확인 → 거의 유사하였으나 shaply 버전이 현 사용 중인 다른 패키지와 맞지 않아 geopandas사용하기로 결정됨
+- 위의 과정에서 패키지 버전을 조율하여 커널을 생성하고, 다른 패키지와의 충돌을 방지하기 위한 과정을 배움
+- 엑셀 파일(xlsx)에서 ()로 묶인 데이터를 튜플(tuple)로 생각하였지만, 실제로는 문자열(str)로 처리되어 오류가 발생했습니다. 엑셀 파일 내에서는 튜플이나 리스트와 같은 파이썬의 자료구조 개념이 존재하지 않기 때문에, 데이터를 파이썬에서 처리할 수 있도록 전처리해야 함을 알게됨
